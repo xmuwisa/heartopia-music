@@ -1,41 +1,13 @@
-<header class="header">
-	<h1 class="title">Heartopia Music</h1>
-	<nav aria-label="Primary">
-		<ul class="nav-list">
-			<li><a href="/">Home</a></li>
-			<li><a href="/piano">Piano</a></li>
-		</ul>
+<script>
+	import { Settings, Music, House } from 'lucide-svelte';
+</script>
+
+<header>
+	<nav class="bg-base-200 flex w-full items-center justify-center rounded-full p-4">
+		<div class="flex flex-row items-center justify-center gap-2">
+			<a href="/" class="nav-link"><House size={20} /></a>
+			<a href="/music" class="nav-link"><Music size={20} /></a>
+			<a href="/settings" class="nav-link"><Settings size={20} /></a>
+		</div>
 	</nav>
 </header>
-
-<style>
-	.header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding: 1rem;
-		border-bottom: 1px solid;
-	}
-
-	.title {
-		font-size: 1.125rem;
-		font-weight: 600;
-		margin: 0;
-	}
-
-	.nav-list {
-		display: flex;
-		gap: 1rem;
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-
-	a {
-		text-decoration: none;
-	}
-
-	a:hover {
-		text-decoration: underline;
-	}
-</style>
