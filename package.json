@@ -1,6 +1,9 @@
 {
 	"name": "heartopia-music",
 	"version": "0.0.1",
+	"dependencies": {
+		"jspdf": "^3.0.4"
+	},
 	"devDependencies": {
 		"@playwright/test": "^1.58.2",
 		"@sveltejs/adapter-auto": "^7.0.0",
