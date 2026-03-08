@@ -1,4 +1,10 @@
-type Octave = 'top' | 'middle' | 'bottom';
+import {
+	FLAT_TO_SHARP,
+	PIANO_KEYBINDS,
+	SOLFEGE_MAP,
+	type Octave
+} from '$lib/translators/keybinds/piano';
+import type { InstrumentTranslator, TranslateOptions } from '$lib/translators/types';
 
 type ParsedNote = {
 	note: string;
@@ -8,73 +14,6 @@ type ParsedNote = {
 type TranslationWithSolfege = {
 	solfege: string;
 	keybind: string;
-};
-
-type TranslatePianoNotesOptions = {
-	showSolfege?: boolean;
-};
-
-const KEYBINDS: Record<Octave, Record<string, string>> = {
-	top: {
-		C: 'Q',
-		D: 'W',
-		E: 'E',
-		F: 'R',
-		G: 'T',
-		A: 'Y',
-		B: 'U',
-		'C#': '2',
-		'D#': '3',
-		'F#': '5',
-		'G#': '6',
-		'A#': '7'
-	},
-	middle: {
-		C: 'Z',
-		D: 'X',
-		E: 'C',
-		F: 'V',
-		G: 'B',
-		A: 'N',
-		B: 'M',
-		'C#': 'S',
-		'D#': 'D',
-		'F#': 'G',
-		'G#': 'H',
-		'A#': 'J'
-	},
-	bottom: {
-		C: ',',
-		D: '.',
-		E: '/',
-		F: 'O',
-		G: 'P',
-		A: '[',
-		B: ']',
-		'C#': 'L',
-		'D#': ';',
-		'F#': '0',
-		'G#': '-',
-		'A#': '='
-	}
-};
-
-const SOLFEGE_MAP: Record<string, string> = {
-	DO: 'C',
-	RE: 'D',
-	MI: 'E',
-	FA: 'F',
-	SOL: 'G',
-	LA: 'A',
-	SI: 'B'
-};
-
-const FLAT_TO_SHARP: Record<string, string> = {
-	Db: 'C#',
-	Eb: 'D#',
-	Gb: 'F#',
-	Ab: 'G#',
-	Bb: 'A#'
 };
 
 function normalizeSolfege(token: string): string | null {
@@ -131,7 +70,7 @@ function parseNote(token: string): ParsedNote | null {
 function getKeybind(parsedNote: ParsedNote | null): string | null {
 	if (!parsedNote) return null;
 	const { note, octave } = parsedNote;
-	return KEYBINDS[octave][note] ?? null;
+	return PIANO_KEYBINDS[octave][note] ?? null;
 }
 
 function getSolfegeName(parsedNote: ParsedNote | null): string | null {
@@ -260,10 +199,7 @@ function translateLineWithSolfege(line: string): TranslationWithSolfege {
 	};
 }
 
-export function translatePianoNotes(
-	input: string,
-	options: TranslatePianoNotesOptions = {}
-): string {
+export function translatePianoNotes(input: string, options: TranslateOptions = {}): string {
 	const { showSolfege = false } = options;
 	const lines = input.split('\n');
 	const outputLines: string[] = [];
@@ -292,11 +228,8 @@ export function translatePianoNotes(
 	return outputLines.join('\n');
 }
 
-export {
-	parseNote,
-	isNoteLine,
-	getKeybind,
-	getSolfegeName,
-	translateLine,
-	translateLineWithSolfege
+export const pianoTranslator: InstrumentTranslator = {
+	instrument: 'Piano',
+	exportTitle: 'Heartopia Piano Keybinds',
+	translate: (input, options = {}) => translatePianoNotes(input, options)
 };
