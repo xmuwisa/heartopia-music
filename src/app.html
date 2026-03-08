@@ -3,6 +3,16 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script>
+			(() => {
+				const storageKey = 'heartopia-theme';
+				const defaultTheme = 'pastel';
+				const availableThemes = ['valentine', 'black', 'pastel', 'night'];
+				const storedTheme = localStorage.getItem(storageKey);
+				const theme = availableThemes.includes(storedTheme) ? storedTheme : defaultTheme;
+				document.documentElement.setAttribute('data-theme', theme);
+			})();
+		</script>
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">
