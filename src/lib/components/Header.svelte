@@ -1,6 +1,7 @@
 <script>
+	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
-	import { Settings, Music, House } from 'lucide-svelte';
+	import { Icon, Cog6Tooth, MusicalNote, Heart } from 'svelte-hero-icons';
 
 	let isScrolled = false;
 
@@ -25,9 +26,30 @@
 		}`}
 	>
 		<div class="flex flex-row items-center justify-center gap-2">
-			<a href="/" class="nav-link"><House size={20} /></a>
-			<a href="/music" class="nav-link"><Music size={20} /></a>
-			<a href="/settings" class="nav-link"><Settings size={20} /></a>
+			<a
+				href="/"
+				class="nav-link transition-all duration-300 hover:scale-110 hover:text-accent"
+				class:text-secondary={$page.url.pathname === '/'}
+				aria-current={$page.url.pathname === '/' ? 'page' : undefined}
+			>
+				<Icon src={Heart} class="h-5 w-5" solid />
+			</a>
+			<a
+				href="/music"
+				class="nav-link transition-all duration-300 hover:scale-110 hover:text-accent"
+				class:text-secondary={$page.url.pathname.startsWith('/music')}
+				aria-current={$page.url.pathname.startsWith('/music') ? 'page' : undefined}
+			>
+				<Icon src={MusicalNote} class="h-5 w-5" solid />
+			</a>
+			<a
+				href="/settings"
+				class="nav-link transition-all duration-300 hover:scale-110 hover:text-accent"
+				class:text-secondary={$page.url.pathname.startsWith('/settings')}
+				aria-current={$page.url.pathname.startsWith('/settings') ? 'page' : undefined}
+			>
+				<Icon src={Cog6Tooth} class="h-5 w-5" solid />
+			</a>
 		</div>
 	</nav>
 </header>

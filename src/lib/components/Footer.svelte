@@ -1,11 +1,11 @@
 <script>
-	import { Heart } from 'lucide-svelte';
+	import { Icon, Heart } from 'svelte-hero-icons';
 </script>
 
 <footer>
 	<div class="flex items-center justify-center p-4">
 		<p class="flex items-center justify-center gap-1">
-			Made with <Heart size={16} fill="currentColor" /> by Iza
+			Made with <Icon src={Heart} class="h-4 w-4" solid /> by Iza
 		</p>
 	</div>
 </footer>
