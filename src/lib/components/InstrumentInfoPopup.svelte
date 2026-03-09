@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { Icon, InformationCircle } from 'svelte-hero-icons';
-	import { INSTRUMENT_INFO_MAP } from '$lib/instrument-info';
-	import type { Instrument } from '$lib/translators';
+	import { KEYS_INFO_MAP } from '$lib/keys-info';
+	import type { KeySetting } from '$lib/translators';
 
 	let dialogEl: HTMLDialogElement;
 
-	export let instrument: Instrument;
+	export let keySetting: KeySetting;
 
-	$: info = INSTRUMENT_INFO_MAP[instrument];
+	$: info = KEYS_INFO_MAP[keySetting];
 
 	const isExternalUrl = (value: string): boolean => /^https?:\/\//.test(value);
 

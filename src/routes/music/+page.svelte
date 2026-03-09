@@ -1,8 +1,8 @@
 <script lang="ts">
 	import InstrumentSection from '$lib/components/InstrumentSection.svelte';
-	import { INSTRUMENTS, type Instrument } from '$lib/translators';
+	import { KEY_SETTINGS, type KeySetting } from '$lib/translators';
 
-	let selectedInstrument: Instrument = INSTRUMENTS[0];
+	let selectedKeySetting: KeySetting = KEY_SETTINGS[0];
 </script>
 
 <section class="flex min-h-screen w-full flex-col items-center justify-start">
@@ -13,15 +13,15 @@
 			</h1>
 			<div>
 				<label class="form-control w-full">
-					<select class="select-bordered select w-full" bind:value={selectedInstrument}>
-						{#each INSTRUMENTS as instrument}
-							<option value={instrument}>{instrument}</option>
+					<select class="select-bordered select w-full" bind:value={selectedKeySetting}>
+						{#each KEY_SETTINGS as keySetting}
+							<option value={keySetting}>{keySetting}</option>
 						{/each}
 					</select>
 				</label>
 			</div>
 		</div>
 
-		<InstrumentSection instrument={selectedInstrument} />
+		<InstrumentSection keySetting={selectedKeySetting} />
 	</div>
 </section>

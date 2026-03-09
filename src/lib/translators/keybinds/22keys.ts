@@ -1,6 +1,6 @@
 type Octave = 'top' | 'middle' | 'bottom';
 
-export const PIANO_KEYBINDS: Record<Octave, Record<string, string>> = {
+export const KEYS_22_KEYBINDS: Record<Octave, Record<string, string>> = {
 	top: {
 		C: 'Q',
 		D: 'W',

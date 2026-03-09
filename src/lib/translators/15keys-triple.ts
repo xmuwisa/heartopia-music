@@ -1,14 +1,15 @@
 import {
-	FLAT_TO_SHARP,
-	PIANO_KEYBINDS,
+	FLAT_TO_15_TRIPLE_KEY,
+	KEYS_15_TRIPLE_KEYBINDS,
+	SHARP_TO_15_TRIPLE_KEY,
 	SOLFEGE_MAP,
-	type Octave
-} from '$lib/translators/keybinds/piano';
+	type Octave15Triple
+} from '$lib/translators/keybinds/15keys-triple';
 import type { InstrumentTranslator, TranslateOptions } from '$lib/translators/types';
 
 type ParsedNote = {
 	note: string;
-	octave: Octave;
+	octave: Octave15Triple;
 };
 
 type TranslationWithSolfege = {
@@ -18,9 +19,9 @@ type TranslationWithSolfege = {
 
 function normalizeSolfege(token: string): string | null {
 	const upper = token.toUpperCase();
-	for (const solfege of Object.keys(SOLFEGE_MAP)) {
+	for (const [solfege, note] of Object.entries(SOLFEGE_MAP)) {
 		if (upper === solfege) {
-			return SOLFEGE_MAP[solfege];
+			return note;
 		}
 	}
 
@@ -31,14 +32,17 @@ function parseNote(token: string): ParsedNote | null {
 	const strippedToken = token.replace(/[()]/g, '');
 	if (!strippedToken) return null;
 
-	let octave: Octave = 'middle';
+	let octave: Octave15Triple = 'middle';
 	let noteStr = strippedToken;
 
-	if (strippedToken.startsWith('^')) {
+	if (strippedToken.startsWith('^^')) {
+		octave = 'highest';
+		noteStr = strippedToken.substring(2);
+	} else if (strippedToken.startsWith('^')) {
 		octave = 'top';
 		noteStr = strippedToken.substring(1);
 	} else if (strippedToken.startsWith('.')) {
-		octave = 'bottom';
+		octave = 'middle';
 		noteStr = strippedToken.substring(1);
 	}
 
@@ -46,7 +50,6 @@ function parseNote(token: string): ParsedNote | null {
 	if (!noteStr) return null;
 
 	let note = normalizeSolfege(noteStr);
-
 	if (!note) {
 		const noteMatch = noteStr.match(/^([A-Ga-g])([#b]?)$/);
 		if (!noteMatch) {
@@ -57,10 +60,18 @@ function parseNote(token: string): ParsedNote | null {
 		const accidental = noteMatch[2];
 
 		if (accidental === 'b') {
-			const flatKey = `${note}b`;
-			note = FLAT_TO_SHARP[flatKey] ?? note;
+			note = FLAT_TO_15_TRIPLE_KEY[`${note}b`] ?? note;
 		} else if (accidental === '#') {
-			note = `${note}#`;
+			note = SHARP_TO_15_TRIPLE_KEY[`${note}#`] ?? note;
+		}
+	}
+
+	if (!KEYS_15_TRIPLE_KEYBINDS[octave][note]) {
+		if (octave === 'highest') {
+			octave = 'top';
+		}
+		if (!KEYS_15_TRIPLE_KEYBINDS[octave][note]) {
+			octave = 'middle';
 		}
 	}
 
@@ -70,7 +81,7 @@ function parseNote(token: string): ParsedNote | null {
 function getKeybind(parsedNote: ParsedNote | null): string | null {
 	if (!parsedNote) return null;
 	const { note, octave } = parsedNote;
-	return PIANO_KEYBINDS[octave][note] ?? null;
+	return KEYS_15_TRIPLE_KEYBINDS[octave][note] ?? null;
 }
 
 function getSolfegeName(parsedNote: ParsedNote | null): string | null {
@@ -80,20 +91,17 @@ function getSolfegeName(parsedNote: ParsedNote | null): string | null {
 	let baseName = '';
 
 	for (const [solfege, mappedNote] of Object.entries(SOLFEGE_MAP)) {
-		if (mappedNote === note.replace('#', '')) {
+		if (mappedNote === note) {
 			baseName = solfege;
 			break;
 		}
 	}
 
 	if (!baseName) return null;
+	if (octave === 'top') return `^${baseName}`;
+	if (octave === 'highest') return `^^${baseName}`;
 
-	let result = baseName;
-	if (note.includes('#')) result += '#';
-	if (octave === 'top') result = `^${result}`;
-	if (octave === 'bottom') result = `.${result}`;
-
-	return result;
+	return baseName;
 }
 
 function isNoteLine(line: string): boolean {
@@ -104,7 +112,9 @@ function isNoteLine(line: string): boolean {
 		if (!token) continue;
 
 		token = token.replace(/[()]/g, '');
-		if (token.startsWith('^') || token.startsWith('.')) {
+		if (token.startsWith('^^')) {
+			token = token.substring(2);
+		} else if (token.startsWith('^') || token.startsWith('.')) {
 			token = token.substring(1);
 		}
 
@@ -199,7 +209,7 @@ function translateLineWithSolfege(line: string): TranslationWithSolfege {
 	};
 }
 
-export function translatePianoNotes(input: string, options: TranslateOptions = {}): string {
+export function translate15KeysTripleNotes(input: string, options: TranslateOptions = {}): string {
 	const { showSolfege = false } = options;
 	const lines = input.split('\n');
 	const outputLines: string[] = [];
@@ -228,7 +238,7 @@ export function translatePianoNotes(input: string, options: TranslateOptions = {
 	return outputLines.join('\n');
 }
 
-export const pianoTranslator: InstrumentTranslator = {
-	exportTitle: 'Heartopia Piano Keybinds',
-	translate: (input, options = {}) => translatePianoNotes(input, options)
+export const keys15TripleTranslator: InstrumentTranslator = {
+	exportTitle: 'Heartopia 15 Keys (Triple Row) Keybinds',
+	translate: (input, options = {}) => translate15KeysTripleNotes(input, options)
 };

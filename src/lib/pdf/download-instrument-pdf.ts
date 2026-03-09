@@ -4,7 +4,7 @@ import poppinsRegularTtfUrl from '$lib/assets/fonts/Poppins-Regular.ttf?url';
 
 type DownloadInstrumentPdfParams = {
 	songTitle: string;
-	instrument: string;
+	keySetting: string;
 	outputNotes: string;
 };
 
@@ -110,7 +110,7 @@ function isLikelyKeybindLine(line: string): boolean {
 
 export async function downloadInstrumentPdf({
 	songTitle,
-	instrument,
+	keySetting,
 	outputNotes
 }: DownloadInstrumentPdfParams): Promise<void> {
 	const { jsPDF } = await import('jspdf');
@@ -139,7 +139,7 @@ export async function downloadInstrumentPdf({
 	doc.setFont('Poppins', 'normal');
 	doc.setFontSize(10);
 	doc.setTextColor(130, 130, 130);
-	doc.text(`HEARTOPIA ${instrument.toUpperCase()} MUSIC NOTE`, centerX, subtitleY, {
+	doc.text(`HEARTOPIA ${keySetting.toUpperCase()} KEYBINDS`, centerX, subtitleY, {
 		align: 'center'
 	});
 
@@ -168,5 +168,10 @@ export async function downloadInstrumentPdf({
 		.replace(/^-+|-+$/g, '')
 		.toLowerCase();
 
-	doc.save(`${safeTitle || 'heartopia-song'}-${instrument.toLowerCase()}-keybinds.pdf`);
+	const safeKeySetting = keySetting
+		.replace(/[^a-z0-9]+/gi, '-')
+		.replace(/^-+|-+$/g, '')
+		.toLowerCase();
+
+	doc.save(`${safeTitle || 'heartopia-song'}-${safeKeySetting || 'key-setting'}-keybinds.pdf`);
 }
