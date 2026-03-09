@@ -1,15 +1,11 @@
-<footer class="footer">
-	<p>© {new Date().getFullYear()} Heartopia Music</p>
+<script>
+	import { Icon, Heart } from 'svelte-hero-icons';
+</script>
+
+<footer>
+	<div class="flex items-center justify-center p-4">
+		<p class="flex items-center justify-center gap-1">
+			Made with <Icon src={Heart} class="h-4 w-4" solid /> by Iza
+		</p>
+	</div>
 </footer>
-
-<style>
-	.footer {
-		padding: 1rem;
-		border-top: 1px solid;
-	}
-
-	p {
-		margin: 0;
-		font-size: 0.875rem;
-	}
-</style>
