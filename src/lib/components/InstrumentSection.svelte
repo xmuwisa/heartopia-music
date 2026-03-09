@@ -1,15 +1,18 @@
 <script lang="ts">
 	import InstrumentDownloadPopup from '$lib/components/InstrumentDownloadPopup.svelte';
 	import InstrumentInfoPopup from '$lib/components/InstrumentInfoPopup.svelte';
+	import InstrumentSavePopup from '$lib/components/InstrumentSavePopup.svelte';
 	import { downloadInstrumentPdf } from '$lib/pdf/download-instrument-pdf';
+	import { saveTranslation } from '$lib/saved-translations';
 	import { getKeySettingTranslator } from '$lib/translators';
 	import type { InstrumentTranslator } from '$lib/translators';
 	import type { KeySetting } from '$lib/translators';
-	import { Icon, Clipboard, ArrowDownTray } from 'svelte-hero-icons';
+	import { Icon, Clipboard, ArrowDownTray, Star } from 'svelte-hero-icons';
 
 	export let keySetting: KeySetting;
 
 	let downloadPopup: { open: () => void } | null = null;
+	let savePopup: { open: () => void } | null = null;
 	let inputNotes = '';
 	let outputNotes = '';
 	let showSolfege = false;
@@ -61,6 +64,20 @@
 		await generatePdf(event.detail);
 	}
 
+	function saveOutput(): void {
+		savePopup?.open();
+	}
+
+	function handleSaveConfirm(event: CustomEvent<string>): void {
+		saveTranslation({
+			title: event.detail,
+			keySetting,
+			inputNotes,
+			outputNotes,
+			showSolfege
+		});
+	}
+
 	function handleInputKeydown(event: KeyboardEvent): void {
 		if (event.ctrlKey && event.key === 'Enter') {
 			translateNotes();
@@ -98,6 +115,17 @@
 				<label class="btn btn-square cursor-pointer btn-ghost btn-sm" aria-label="Show solfege">
 					<input type="checkbox" class="checkbox checkbox-sm" bind:checked={showSolfege} />
 				</label>
+			</div>
+			<div class="tooltip tooltip-bottom lg:tooltip-right" data-tip="Save">
+				<button
+					type="button"
+					class="btn btn-square btn-ghost btn-sm"
+					aria-label="Save"
+					onclick={saveOutput}
+					disabled={!outputNotes.trim()}
+				>
+					<Icon src={Star} class="h-5 w-5" />
+				</button>
 			</div>
 		</div>
 	</div>
@@ -151,3 +179,5 @@ And starting conversations...`}
 	bind:this={downloadPopup}
 	on:confirm={(event) => void handleDownloadConfirm(event)}
 />
+
+<InstrumentSavePopup bind:this={savePopup} on:confirm={handleSaveConfirm} />

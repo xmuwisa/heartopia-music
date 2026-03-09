@@ -2,7 +2,15 @@ import { browser } from '$app/environment';
 
 export const THEME_STORAGE_KEY = 'heartopia-theme';
 
-export const AVAILABLE_THEMES = ['valentine', 'black', 'pastel', 'night'] as const;
+export const AVAILABLE_THEMES = [
+	'valentine',
+	'black',
+	'pastel',
+	'night',
+	'dim',
+	'autumn',
+	'garden'
+] as const;
 export type Theme = (typeof AVAILABLE_THEMES)[number];
 
 export const DEFAULT_THEME: Theme = 'pastel';
