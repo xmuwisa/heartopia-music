@@ -1,4 +1,5 @@
 import { keys22Translator } from '$lib/translators/22keys';
+import { keys15DoubleTranslator } from '$lib/translators/15keys-double';
 import type { InstrumentTranslator } from '$lib/translators/types';
 
 export const KEY_SETTINGS = ['22-Keys', '15 Keys (Double Row)', '15 Keys (Triple Row)'] as const;
@@ -14,7 +15,7 @@ function createLayoutTranslator(keySetting: KeySetting): InstrumentTranslator {
 
 const TRANSLATORS: Record<KeySetting, InstrumentTranslator> = {
 	'22-Keys': keys22Translator,
-	'15 Keys (Double Row)': createLayoutTranslator('15 Keys (Double Row)'),
+	'15 Keys (Double Row)': keys15DoubleTranslator,
 	'15 Keys (Triple Row)': createLayoutTranslator('15 Keys (Triple Row)')
 };
 
