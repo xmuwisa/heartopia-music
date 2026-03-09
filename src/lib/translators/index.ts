@@ -1,28 +1,25 @@
-import { pianoTranslator } from '$lib/translators/piano';
+import { keys22Translator } from '$lib/translators/22keys';
 import type { InstrumentTranslator } from '$lib/translators/types';
 
-export const INSTRUMENTS = ['Piano', 'Violin', 'Lute', 'Lyre', 'Cello', 'Guitar'] as const;
+export const KEY_SETTINGS = ['22-Keys', '15 Keys (Double Row)', '15 Keys (Triple Row)'] as const;
 
-export type Instrument = (typeof INSTRUMENTS)[number];
+export type KeySetting = (typeof KEY_SETTINGS)[number];
 
-function createFallbackTranslator(instrument: Instrument): InstrumentTranslator {
+function createLayoutTranslator(keySetting: KeySetting): InstrumentTranslator {
 	return {
-		exportTitle: `Heartopia ${instrument} Keybinds`,
+		exportTitle: `Heartopia ${keySetting} Keybinds`,
 		translate: (input) => input
 	};
 }
 
-const TRANSLATORS: Record<Instrument, InstrumentTranslator> = {
-	Piano: pianoTranslator,
-	Violin: createFallbackTranslator('Violin'),
-	Lute: createFallbackTranslator('Lute'),
-	Lyre: createFallbackTranslator('Lyre'),
-	Cello: createFallbackTranslator('Cello'),
-	Guitar: createFallbackTranslator('Guitar')
+const TRANSLATORS: Record<KeySetting, InstrumentTranslator> = {
+	'22-Keys': keys22Translator,
+	'15 Keys (Double Row)': createLayoutTranslator('15 Keys (Double Row)'),
+	'15 Keys (Triple Row)': createLayoutTranslator('15 Keys (Triple Row)')
 };
 
-export function getInstrumentTranslator(instrument: Instrument): InstrumentTranslator {
-	return TRANSLATORS[instrument];
+export function getKeySettingTranslator(keySetting: KeySetting): InstrumentTranslator {
+	return TRANSLATORS[keySetting];
 }
 
 export { TRANSLATORS };

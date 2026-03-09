@@ -1,4 +1,4 @@
-import type { Instrument } from '$lib/translators';
+import type { KeySetting } from '$lib/translators';
 
 export type InfoStatus = 'ready' | 'in-progress';
 
@@ -15,16 +15,16 @@ export type InstrumentInfo = {
 	table: InfoTableRow[];
 };
 
-export const INSTRUMENT_INFO_MAP: Record<Instrument, InstrumentInfo> = {
-	Piano: {
+export const INSTRUMENT_INFO_MAP: Record<KeySetting, InstrumentInfo> = {
+	'22-Keys': {
 		status: 'ready',
-		title: 'PIANO INPUT GUIDE',
-		description: 'Formatting rules for the 22-key piano',
+		title: '22-KEYS INPUT GUIDE',
+		description: 'Formatting rules for the 22-key layout',
 		table: [
 			{
 				category: 'Notes',
 				example: 'C D E F G A B / DO RE MI FA SOL LA SI',
-				description: 'You can use standard letter notes or solfege names. Input is case-sensitive.'
+				description: 'Standard letter notes or solfege names.'
 			},
 			{
 				category: 'Higher Octave',
@@ -63,34 +63,16 @@ export const INSTRUMENT_INFO_MAP: Record<Instrument, InstrumentInfo> = {
 			}
 		]
 	},
-	Violin: {
+	'15 Keys (Double Row)': {
 		status: 'in-progress',
 		title: 'IN PROGRESS',
-		description: 'Violin conversion guide is in progress.',
+		description: '15 Keys (Double Row) guide is in progress.',
 		table: []
 	},
-	Lute: {
+	'15 Keys (Triple Row)': {
 		status: 'in-progress',
 		title: 'IN PROGRESS',
-		description: 'Lute conversion guide is in progress.',
-		table: []
-	},
-	Lyre: {
-		status: 'in-progress',
-		title: 'IN PROGRESS',
-		description: 'Lyre conversion guide is in progress.',
-		table: []
-	},
-	Cello: {
-		status: 'in-progress',
-		title: 'IN PROGRESS',
-		description: 'Cello conversion guide is in progress.',
-		table: []
-	},
-	Guitar: {
-		status: 'in-progress',
-		title: 'IN PROGRESS',
-		description: 'Guitar conversion guide is in progress.',
+		description: '15 Keys (Triple Row) guide is in progress.',
 		table: []
 	}
 };

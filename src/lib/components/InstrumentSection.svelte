@@ -2,12 +2,12 @@
 	import InstrumentDownloadPopup from '$lib/components/InstrumentDownloadPopup.svelte';
 	import InstrumentInfoPopup from '$lib/components/InstrumentInfoPopup.svelte';
 	import { downloadInstrumentPdf } from '$lib/pdf/download-instrument-pdf';
-	import { getInstrumentTranslator } from '$lib/translators';
+	import { getKeySettingTranslator } from '$lib/translators';
 	import type { InstrumentTranslator } from '$lib/translators';
-	import type { Instrument } from '$lib/translators';
+	import type { KeySetting } from '$lib/translators';
 	import { Icon, Clipboard, ArrowDownTray } from 'svelte-hero-icons';
 
-	export let instrument: Instrument;
+	export let keySetting: KeySetting;
 
 	let downloadPopup: { open: () => void } | null = null;
 	let inputNotes = '';
@@ -16,7 +16,7 @@
 	let autoPreviewEnabled = false;
 	let translator: InstrumentTranslator;
 
-	$: translator = getInstrumentTranslator(instrument);
+	$: translator = getKeySettingTranslator(keySetting);
 
 	$: if (autoPreviewEnabled) {
 		outputNotes = inputNotes.trim() ? translator.translate(inputNotes, { showSolfege }) : '';
@@ -52,7 +52,7 @@
 	async function generatePdf(songTitle: string): Promise<void> {
 		await downloadInstrumentPdf({
 			songTitle,
-			instrument,
+			keySetting,
 			outputNotes
 		});
 	}
@@ -71,7 +71,7 @@
 <section class="relative w-full lg:p-0">
 	<div class="absolute right-0 -bottom-10 lg:top-2 lg:-right-10">
 		<div class="flex flex-row items-start lg:flex-col">
-			<InstrumentInfoPopup {instrument} />
+			<InstrumentInfoPopup {keySetting} />
 			<div class="tooltip tooltip-bottom lg:tooltip-right" data-tip="Download">
 				<button
 					type="button"

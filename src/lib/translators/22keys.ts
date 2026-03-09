@@ -1,9 +1,9 @@
 import {
 	FLAT_TO_SHARP,
-	PIANO_KEYBINDS,
+	KEYS_22_KEYBINDS,
 	SOLFEGE_MAP,
 	type Octave
-} from '$lib/translators/keybinds/piano';
+} from '$lib/translators/keybinds/22keys';
 import type { InstrumentTranslator, TranslateOptions } from '$lib/translators/types';
 
 type ParsedNote = {
@@ -70,7 +70,7 @@ function parseNote(token: string): ParsedNote | null {
 function getKeybind(parsedNote: ParsedNote | null): string | null {
 	if (!parsedNote) return null;
 	const { note, octave } = parsedNote;
-	return PIANO_KEYBINDS[octave][note] ?? null;
+	return KEYS_22_KEYBINDS[octave][note] ?? null;
 }
 
 function getSolfegeName(parsedNote: ParsedNote | null): string | null {
@@ -199,7 +199,7 @@ function translateLineWithSolfege(line: string): TranslationWithSolfege {
 	};
 }
 
-export function translatePianoNotes(input: string, options: TranslateOptions = {}): string {
+export function translate22KeysNotes(input: string, options: TranslateOptions = {}): string {
 	const { showSolfege = false } = options;
 	const lines = input.split('\n');
 	const outputLines: string[] = [];
@@ -228,7 +228,7 @@ export function translatePianoNotes(input: string, options: TranslateOptions = {
 	return outputLines.join('\n');
 }
 
-export const pianoTranslator: InstrumentTranslator = {
-	exportTitle: 'Heartopia Piano Keybinds',
-	translate: (input, options = {}) => translatePianoNotes(input, options)
+export const keys22Translator: InstrumentTranslator = {
+	exportTitle: 'Heartopia 22-Keys Keybinds',
+	translate: (input, options = {}) => translate22KeysNotes(input, options)
 };
