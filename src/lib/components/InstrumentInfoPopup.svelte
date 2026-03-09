@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Icon, InformationCircle } from 'svelte-hero-icons';
 	import { INSTRUMENT_INFO_MAP } from '$lib/instrument-info';
-	import type { Instrument } from '$lib/instruments';
+	import type { Instrument } from '$lib/translators';
 
 	let dialogEl: HTMLDialogElement;
 

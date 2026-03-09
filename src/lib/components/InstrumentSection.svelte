@@ -1,12 +1,15 @@
 <script lang="ts">
+	import InstrumentDownloadPopup from '$lib/components/InstrumentDownloadPopup.svelte';
 	import InstrumentInfoPopup from '$lib/components/InstrumentInfoPopup.svelte';
+	import { downloadInstrumentPdf } from '$lib/pdf/download-instrument-pdf';
 	import { getInstrumentTranslator } from '$lib/translators';
 	import type { InstrumentTranslator } from '$lib/translators';
-	import type { Instrument } from '$lib/instruments';
+	import type { Instrument } from '$lib/translators';
 	import { Icon, Clipboard, ArrowDownTray } from 'svelte-hero-icons';
 
 	export let instrument: Instrument;
 
+	let downloadPopup: { open: () => void } | null = null;
 	let inputNotes = '';
 	let outputNotes = '';
 	let showSolfege = false;
@@ -46,44 +49,16 @@
 		}
 	}
 
-	async function downloadOutput(): Promise<void> {
-		if (!outputNotes.trim()) return;
+	async function generatePdf(songTitle: string): Promise<void> {
+		await downloadInstrumentPdf({
+			songTitle,
+			instrument,
+			outputNotes
+		});
+	}
 
-		const { jsPDF } = await import('jspdf');
-		const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-
-		doc.setFont('helvetica', 'bold');
-		doc.setFontSize(16);
-		doc.text(translator.exportTitle, 105, 15, { align: 'center' });
-
-		doc.setFont('helvetica', 'normal');
-		doc.setFontSize(8);
-		doc.text(`Generated: ${new Date().toLocaleString()}`, 105, 22, { align: 'center' });
-
-		doc.setFont('courier', 'normal');
-		doc.setFontSize(10);
-
-		const pageHeight = doc.internal.pageSize.getHeight();
-		const margin = 15;
-		const lineHeight = 5;
-		const maxWidth = 180;
-		let y = 30;
-
-		for (const rawLine of outputNotes.split('\n')) {
-			const wrapped = doc.splitTextToSize(rawLine || ' ', maxWidth) as string[];
-
-			for (const line of wrapped) {
-				if (y > pageHeight - margin) {
-					doc.addPage();
-					y = margin;
-				}
-
-				doc.text(line, margin, y);
-				y += lineHeight;
-			}
-		}
-
-		doc.save(`heartopia-keybinds-${new Date().toISOString().slice(0, 10)}.pdf`);
+	async function handleDownloadConfirm(event: CustomEvent<string>): Promise<void> {
+		await generatePdf(event.detail);
 	}
 
 	function handleInputKeydown(event: KeyboardEvent): void {
@@ -102,7 +77,7 @@
 					type="button"
 					class="btn btn-square btn-ghost btn-sm"
 					aria-label="Download"
-					onclick={downloadOutput}
+					onclick={() => downloadPopup?.open()}
 					disabled={!outputNotes.trim()}
 				>
 					<Icon src={ArrowDownTray} class="h-5 w-5" />
@@ -171,3 +146,8 @@ And starting conversations...`}
 		</div>
 	</div>
 </section>
+
+<InstrumentDownloadPopup
+	bind:this={downloadPopup}
+	on:confirm={(event) => void handleDownloadConfirm(event)}
+/>

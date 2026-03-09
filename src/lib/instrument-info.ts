@@ -1,4 +1,4 @@
-import type { Instrument } from '$lib/instruments';
+import type { Instrument } from '$lib/translators';
 
 export type InfoStatus = 'ready' | 'in-progress';
 

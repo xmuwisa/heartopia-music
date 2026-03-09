@@ -1,6 +1,6 @@
 <script lang="ts">
 	import InstrumentSection from '$lib/components/InstrumentSection.svelte';
-	import { INSTRUMENTS, type Instrument } from '$lib/instruments';
+	import { INSTRUMENTS, type Instrument } from '$lib/translators';
 
 	let selectedInstrument: Instrument = INSTRUMENTS[0];
 </script>

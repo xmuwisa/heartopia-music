@@ -229,7 +229,6 @@ export function translatePianoNotes(input: string, options: TranslateOptions = {
 }
 
 export const pianoTranslator: InstrumentTranslator = {
-	instrument: 'Piano',
 	exportTitle: 'Heartopia Piano Keybinds',
 	translate: (input, options = {}) => translatePianoNotes(input, options)
 };
