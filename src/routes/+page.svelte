@@ -6,7 +6,7 @@
 		</div>
 		<div class="flex flex-col items-center justify-center gap-2">
 			<p class="text-center text-sm text-base-content/50 sm:text-base">
-				Hi, Guest!<br />This is a simple music note translator in progress.
+				Hi, Guest!<br />This is a simple music note translator (experimental).
 			</p>
 			<p class="text-center text-sm text-base-content/50 sm:text-base">
 				Translate traditional music notes to Heartopia music notes. Saved translations are saved on

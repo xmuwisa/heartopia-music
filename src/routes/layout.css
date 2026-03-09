@@ -16,3 +16,14 @@ body {
 .title {
 	font-family: 'Darumadrop One', cursive;
 }
+
+/* Hide Buy Me a Coffee floating widget only in saved output expanded mode. */
+body.hide-bmc-widget #bmc-wbtn,
+body.hide-bmc-widget #bmc-wbtn + iframe,
+body.hide-bmc-widget iframe[id*='bmc'],
+body.hide-bmc-widget [class*='bmc-btn'] {
+	display: none !important;
+	visibility: hidden !important;
+	opacity: 0 !important;
+	pointer-events: none !important;
+}
