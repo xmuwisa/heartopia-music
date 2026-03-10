@@ -26,38 +26,46 @@
 		}`}
 	>
 		<div class="flex flex-row items-center justify-center gap-2">
-			<a
-				href="/"
-				class="nav-link transition-all duration-300 hover:scale-110 hover:text-accent"
-				class:text-secondary={$page.url.pathname === '/'}
-				aria-current={$page.url.pathname === '/' ? 'page' : undefined}
-			>
-				<Icon src={Heart} class="h-5 w-5" solid />
-			</a>
-			<a
-				href="/music"
-				class="nav-link transition-all duration-300 hover:scale-110 hover:text-accent"
-				class:text-secondary={$page.url.pathname.startsWith('/music')}
-				aria-current={$page.url.pathname.startsWith('/music') ? 'page' : undefined}
-			>
-				<Icon src={MusicalNote} class="h-5 w-5" solid />
-			</a>
-			<a
-				href="/settings"
-				class="nav-link transition-all duration-300 hover:scale-110 hover:text-accent"
-				class:text-secondary={$page.url.pathname.startsWith('/settings')}
-				aria-current={$page.url.pathname.startsWith('/settings') ? 'page' : undefined}
-			>
-				<Icon src={Cog6Tooth} class="h-5 w-5" solid />
-			</a>
-			<a
-				href="/saved"
-				class="nav-link transition-all duration-300 hover:scale-110 hover:text-accent"
-				class:text-secondary={$page.url.pathname.startsWith('/saved')}
-				aria-current={$page.url.pathname.startsWith('/saved') ? 'page' : undefined}
-			>
-				<Icon src={Star} class="h-5 w-5" solid />
-			</a>
+			<div class="tooltip tooltip-bottom" data-tip="Home">
+				<a
+					href="/"
+					class="nav-link transition-all duration-300 hover:scale-110 hover:text-accent"
+					class:text-secondary={$page.url.pathname === '/'}
+					aria-current={$page.url.pathname === '/' ? 'page' : undefined}
+				>
+					<Icon src={Heart} class="h-5 w-5" solid />
+				</a>
+			</div>
+			<div class="tooltip tooltip-bottom" data-tip="Translator">
+				<a
+					href="/music"
+					class="nav-link transition-all duration-300 hover:scale-110 hover:text-accent"
+					class:text-secondary={$page.url.pathname.startsWith('/music')}
+					aria-current={$page.url.pathname.startsWith('/music') ? 'page' : undefined}
+				>
+					<Icon src={MusicalNote} class="h-5 w-5" solid />
+				</a>
+			</div>
+			<div class="tooltip tooltip-bottom" data-tip="Settings">
+				<a
+					href="/settings"
+					class="nav-link transition-all duration-300 hover:scale-110 hover:text-accent"
+					class:text-secondary={$page.url.pathname.startsWith('/settings')}
+					aria-current={$page.url.pathname.startsWith('/settings') ? 'page' : undefined}
+				>
+					<Icon src={Cog6Tooth} class="h-5 w-5" solid />
+				</a>
+			</div>
+			<div class="tooltip tooltip-bottom" data-tip="Saved">
+				<a
+					href="/saved"
+					class="nav-link transition-all duration-300 hover:scale-110 hover:text-accent"
+					class:text-secondary={$page.url.pathname.startsWith('/saved')}
+					aria-current={$page.url.pathname.startsWith('/saved') ? 'page' : undefined}
+				>
+					<Icon src={Star} class="h-5 w-5" solid />
+				</a>
+			</div>
 		</div>
 	</nav>
 </header>
