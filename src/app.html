@@ -7,7 +7,17 @@
 			(() => {
 				const storageKey = 'heartopia-theme';
 				const defaultTheme = 'pastel';
-				const availableThemes = ['valentine', 'black', 'pastel', 'night'];
+				const availableThemes = [
+					'valentine',
+					'black',
+					'pastel',
+					'night',
+					'dim',
+					'autumn',
+					'garden',
+					'retro',
+					'coffee'
+				];
 				const storedTheme = localStorage.getItem(storageKey);
 				const theme = availableThemes.includes(storedTheme) ? storedTheme : defaultTheme;
 				document.documentElement.setAttribute('data-theme', theme);

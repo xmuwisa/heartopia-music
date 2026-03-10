@@ -3,6 +3,9 @@
 
 	const dispatch = createEventDispatcher<{ confirm: string }>();
 
+	export let heading = 'SAVE TRANSLATION';
+	export let description = 'Enter a title so you can find this translation later.';
+
 	let dialogEl: HTMLDialogElement;
 	let titleInput = '';
 	let titleError = '';
@@ -32,10 +35,8 @@
 
 <dialog bind:this={dialogEl} class="modal">
 	<div class="modal-box">
-		<h3 class="title text-center text-3xl text-primary">SAVE TRANSLATION</h3>
-		<p class="mt-1 text-center text-sm opacity-70">
-			Enter a title so you can find this translation later.
-		</p>
+		<h3 class="title text-center text-3xl text-primary">{heading}</h3>
+		<p class="mt-1 text-center text-sm opacity-70">{description}</p>
 
 		<div class="form-control mt-4">
 			<label for="save-title-input" class="label">
