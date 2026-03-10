@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
-	import { Icon, Cog6Tooth, MusicalNote, Heart, Star } from 'svelte-hero-icons';
+	import { Icon, Cog6Tooth, MusicalNote, Heart, Star, Pencil } from 'svelte-hero-icons';
 
 	let isScrolled = false;
 
@@ -64,6 +64,16 @@
 					aria-current={$page.url.pathname.startsWith('/saved') ? 'page' : undefined}
 				>
 					<Icon src={Star} class="h-5 w-5" solid />
+				</a>
+			</div>
+			<div class="tooltip tooltip-bottom" data-tip="Created">
+				<a
+					href="/created"
+					class="nav-link transition-all duration-300 hover:scale-110 hover:text-accent"
+					class:text-secondary={$page.url.pathname.startsWith('/created')}
+					aria-current={$page.url.pathname.startsWith('/created') ? 'page' : undefined}
+				>
+					<Icon src={Pencil} class="h-4 w-4" solid />
 				</a>
 			</div>
 		</div>
