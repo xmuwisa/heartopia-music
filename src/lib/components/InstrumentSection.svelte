@@ -18,6 +18,8 @@
 	let showSolfege = false;
 	let autoPreviewEnabled = false;
 	let translator: InstrumentTranslator;
+	let saveToastMessage = '';
+	let saveToastTimer: ReturnType<typeof setTimeout> | null = null;
 
 	$: translator = getKeySettingTranslator(keySetting);
 
@@ -76,6 +78,15 @@
 			outputNotes,
 			showSolfege
 		});
+
+		if (saveToastTimer) {
+			clearTimeout(saveToastTimer);
+		}
+		saveToastMessage = `Saved \"${event.detail}\"`;
+		saveToastTimer = setTimeout(() => {
+			saveToastMessage = '';
+			saveToastTimer = null;
+		}, 2800);
 	}
 
 	function handleInputKeydown(event: KeyboardEvent): void {
@@ -181,3 +192,11 @@ And starting conversations...`}
 />
 
 <InstrumentSavePopup bind:this={savePopup} on:confirm={handleSaveConfirm} />
+
+{#if saveToastMessage}
+	<div class="toast toast-center toast-bottom z-60">
+		<div class="alert alert-success shadow-lg" role="status" aria-live="polite">
+			<span>{saveToastMessage}</span>
+		</div>
+	</div>
+{/if}
