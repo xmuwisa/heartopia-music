@@ -9,7 +9,9 @@ export const AVAILABLE_THEMES = [
 	'night',
 	'dim',
 	'autumn',
-	'garden'
+	'garden',
+	'retro',
+	'coffee'
 ] as const;
 export type Theme = (typeof AVAILABLE_THEMES)[number];
 
