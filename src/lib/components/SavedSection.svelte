@@ -18,7 +18,9 @@
 	let outputScrollEl: HTMLDivElement;
 	let isAutoScrolling = false;
 	let autoScrollSpeed = 30;
-	let autoScrollTimer: ReturnType<typeof setInterval> | null = null;
+	let autoScrollAnimationFrame: number | null = null;
+	let autoScrollLastTimestamp: number | null = null;
+	let autoScrollPixelRemainder = 0;
 	let autoScrollStartDelaySeconds = 0;
 	let autoScrollDelayTimer: ReturnType<typeof setTimeout> | null = null;
 	let previousBodyOverflow = '';
@@ -79,21 +81,39 @@
 	}
 
 	function startAutoScroll(): void {
-		if (!outputScrollEl || autoScrollTimer || autoScrollDelayTimer) return;
+		if (!outputScrollEl || autoScrollAnimationFrame || autoScrollDelayTimer) return;
 
 		const beginScrolling = (): void => {
-			autoScrollTimer = setInterval(() => {
-				if (!outputScrollEl) return;
+			autoScrollLastTimestamp = null;
+			autoScrollPixelRemainder = 0;
 
-				const maxScrollTop = outputScrollEl.scrollHeight - outputScrollEl.clientHeight;
-				if (outputScrollEl.scrollTop >= maxScrollTop) {
-					stopAutoScroll();
-					return;
+			const tick = (timestamp: number): void => {
+				if (!outputScrollEl || !isAutoScrolling) return;
+
+				if (autoScrollLastTimestamp === null) {
+					autoScrollLastTimestamp = timestamp;
 				}
 
-				const step = autoScrollSpeed / 20;
-				outputScrollEl.scrollTop = Math.min(outputScrollEl.scrollTop + step, maxScrollTop);
-			}, 50);
+				const deltaSeconds = (timestamp - autoScrollLastTimestamp) / 1000;
+				autoScrollLastTimestamp = timestamp;
+
+				autoScrollPixelRemainder += autoScrollSpeed * deltaSeconds;
+				const step = Math.floor(autoScrollPixelRemainder);
+				if (step > 0) {
+					autoScrollPixelRemainder -= step;
+					const maxScrollTop = outputScrollEl.scrollHeight - outputScrollEl.clientHeight;
+					outputScrollEl.scrollTop = Math.min(outputScrollEl.scrollTop + step, maxScrollTop);
+
+					if (outputScrollEl.scrollTop >= maxScrollTop) {
+						stopAutoScroll();
+						return;
+					}
+				}
+
+				autoScrollAnimationFrame = requestAnimationFrame(tick);
+			};
+
+			autoScrollAnimationFrame = requestAnimationFrame(tick);
 		};
 
 		const delayMs = Math.max(0, autoScrollStartDelaySeconds * 1000);
@@ -110,14 +130,16 @@
 	}
 
 	function stopAutoScroll(): void {
-		if (autoScrollTimer) {
-			clearInterval(autoScrollTimer);
-			autoScrollTimer = null;
+		if (autoScrollAnimationFrame !== null) {
+			cancelAnimationFrame(autoScrollAnimationFrame);
+			autoScrollAnimationFrame = null;
 		}
 		if (autoScrollDelayTimer) {
 			clearTimeout(autoScrollDelayTimer);
 			autoScrollDelayTimer = null;
 		}
+		autoScrollLastTimestamp = null;
+		autoScrollPixelRemainder = 0;
 		isAutoScrolling = false;
 	}
 
@@ -133,17 +155,6 @@
 
 	function handleSpeedChange(event: Event): void {
 		autoScrollSpeed = Number((event.currentTarget as HTMLInputElement).value);
-		if (isAutoScrolling) {
-			if (autoScrollTimer) {
-				clearInterval(autoScrollTimer);
-				autoScrollTimer = null;
-			}
-			if (autoScrollDelayTimer) {
-				clearTimeout(autoScrollDelayTimer);
-				autoScrollDelayTimer = null;
-			}
-			startAutoScroll();
-		}
 	}
 
 	function handleDelayChange(event: Event): void {
